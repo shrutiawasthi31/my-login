@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LexReason Login</title>
+    <style>
+      :root {
+        --cream: #f5efe5;
+        --ivory: #fbf7f1;
+        --panel: rgba(255, 252, 247, 0.86);
+        --ink: #1f1b16;
+        --muted: #766d61;
+        --line: rgba(150, 126, 83, 0.18);
+        --gold: #c9a24d;
+        --gold-deep: #aa7d22;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--ink);
+        font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(201, 162, 77, 0.22), transparent 28%),
+          radial-gradient(circle at 80% 10%, rgba(89, 98, 74, 0.11), transparent 24%),
+          linear-gradient(180deg, #f9f5ee 0%, #f1e8dc 100%);
+      }
+
+      .shell {
+        min-height: 100vh;
+        padding: 1.25rem;
+      }
+
+      .page {
+        min-height: calc(100vh - 2.5rem);
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(420px, 0.8fr);
+        border-radius: 2rem;
+        overflow: hidden;
+        background: rgba(255, 251, 245, 0.62);
+        border: 1px solid rgba(201, 162, 77, 0.16);
+        box-shadow:
+          0 32px 90px rgba(72, 55, 25, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(12px);
+      }
+
+      .hero {
+        position: relative;
+        min-height: 100%;
+        padding: 2.25rem 2.25rem 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background:
+          linear-gradient(180deg, rgba(13, 14, 15, 0.08), rgba(8, 7, 6, 0.74)),
+          linear-gradient(90deg, rgba(10, 10, 10, 0.54), rgba(10, 10, 10, 0.08) 45%, rgba(10, 10, 10, 0.18)),
+          url("./login-reference.png") center center / cover no-repeat;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: auto 1.6rem 1.35rem auto;
+        width: 11rem;
+        height: 11rem;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(201, 162, 77, 0.26), rgba(201, 162, 77, 0));
+        filter: blur(10px);
+        pointer-events: none;
+      }
+
+      .brand-row,
+      .hero-main,
+      .hero-footer {
+        position: relative;
+        z-index: 1;
+      }
+
+      .brand-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.9rem;
+        color: #fff8ea;
+      }
+
+      .brand-badge {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 1rem;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(160deg, rgba(20, 20, 20, 0.86), rgba(65, 53, 35, 0.95));
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: #efc766;
+        font: 700 1.1rem/1 Georgia, serif;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      }
+
+      .brand-copy strong {
+        display: block;
+        font: 700 1.65rem/1.05 Georgia, "Times New Roman", serif;
+        letter-spacing: 0.01em;
+      }
+
+      .brand-copy strong span {
+        color: var(--gold);
+      }
+
+      .brand-copy small {
+        display: block;
+        margin-top: 0.2rem;
+        color: rgba(255, 248, 234, 0.72);
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        font-size: 0.68rem;
+      }
+
+      .hero-tag {
+        padding: 0.7rem 1rem;
+        border-radius: 999px;
+        background: rgba(255, 248, 234, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: #fff6de;
+        font-size: 0.85rem;
+        backdrop-filter: blur(10px);
+      }
+
+      .hero-main {
+        max-width: 39rem;
+        padding-top: 3rem;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        margin-bottom: 1rem;
+        color: #f1d18a;
+        text-transform: uppercase;
+        letter-spacing: 0.24em;
+        font-size: 0.74rem;
+      }
+
+      .hero h1 {
+        margin: 0;
+        max-width: 10ch;
+        color: #fffdf8;
+        font: 700 clamp(3rem, 5vw, 5.15rem) / 0.95 Georgia, "Times New Roman", serif;
+      }
+
+      .hero p {
+        max-width: 34rem;
+        margin: 1.25rem 0 0;
+        color: rgba(255, 249, 239, 0.86);
+        line-height: 1.75;
+        font-size: 1rem;
+      }
+
+      .hero-stats {
+        margin-top: 1.6rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.85rem;
+      }
+
+      .stat {
+        min-width: 10rem;
+        padding: 1rem 1.05rem;
+        border-radius: 1.1rem;
+        background: rgba(255, 249, 239, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(12px);
+      }
+
+      .stat strong {
+        display: block;
+        color: #fffdf8;
+        font: 700 1.25rem/1.1 Georgia, serif;
+      }
+
+      .stat span {
+        display: block;
+        margin-top: 0.25rem;
+        color: rgba(255, 249, 239, 0.75);
+        font-size: 0.88rem;
+      }
+
+      .hero-footer {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .quote {
+        max-width: 38rem;
+        padding: 1.2rem 1.25rem;
+        border-left: 3px solid rgba(201, 162, 77, 0.9);
+        border-radius: 1rem;
+        background: rgba(12, 11, 10, 0.24);
+        color: rgba(255, 250, 242, 0.92);
+        backdrop-filter: blur(8px);
+      }
+
+      .quote strong {
+        display: block;
+        margin-bottom: 0.35rem;
+        font: 700 1.05rem/1.3 Georgia, serif;
+        color: #fff;
+      }
+
+      .pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+      }
+
+      .pill {
+        padding: 0.72rem 0.95rem;
+        border-radius: 999px;
+        background: rgba(255, 249, 239, 0.12);
+        color: #fff8ea;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.88rem;
+        backdrop-filter: blur(10px);
+      }
+
+      .auth-wrap {
+        position: relative;
+        display: grid;
+        place-items: center;
+        padding: 2.25rem;
+        background:
+          linear-gradient(180deg, rgba(255, 251, 246, 0.92), rgba(247, 239, 228, 0.96)),
+          radial-gradient(circle at top right, rgba(201, 162, 77, 0.1), transparent 30%);
+      }
+
+      .auth-wrap::before {
+        content: "";
+        position: absolute;
+        inset: 2rem 2rem auto auto;
+        width: 7rem;
+        height: 7rem;
+        border-radius: 1.5rem;
+        background: linear-gradient(145deg, rgba(201, 162, 77, 0.18), rgba(201, 162, 77, 0));
+        transform: rotate(18deg);
+      }
+
+      .auth-card {
+        position: relative;
+        z-index: 1;
+        width: min(100%, 29rem);
+        padding: 2rem;
+        border-radius: 1.75rem;
+        background: var(--panel);
+        border: 1px solid rgba(201, 162, 77, 0.14);
+        box-shadow:
+          0 18px 50px rgba(78, 53, 13, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.82);
+        backdrop-filter: blur(14px);
+      }
+
+      .kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(201, 162, 77, 0.12);
+        color: var(--gold-deep);
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .auth-card h2 {
+        margin: 0;
+        color: #1d1812;
+        font: 700 clamp(2.25rem, 4vw, 3rem) / 0.98 Georgia, "Times New Roman", serif;
+      }
+
+      .auth-card h2 span {
+        color: var(--gold-deep);
+      }
+
+      .subtext {
+        margin: 0.85rem 0 1.6rem;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .field {
+        margin-bottom: 1rem;
+      }
+
+      .field label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #2a241d;
+        font-weight: 600;
+      }
+
+      .input-wrap,
+      .select-wrap {
+        position: relative;
+      }
+
+      .input-wrap svg,
+      .select-wrap svg {
+        position: absolute;
+        top: 50%;
+        width: 1.15rem;
+        height: 1.15rem;
+        transform: translateY(-50%);
+        color: #7b6b54;
+      }
+
+      .leading {
+        left: 0.95rem;
+      }
+
+      .trailing {
+        right: 1rem;
+      }
+
+      input,
+      select {
+        width: 100%;
+        height: 3.3rem;
+        border-radius: 1rem;
+        border: 1px solid rgba(140, 118, 79, 0.16);
+        background: rgba(255, 253, 249, 0.94);
+        padding: 0 3rem;
+        color: #241d16;
+        outline: none;
+        font: inherit;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+      }
+
+      select {
+        appearance: none;
+      }
+
+      input::placeholder {
+        color: #9b907f;
+      }
+
+      input:focus,
+      select:focus {
+        border-color: rgba(201, 162, 77, 0.82);
+        box-shadow: 0 0 0 5px rgba(201, 162, 77, 0.12);
+        transform: translateY(-1px);
+      }
+
+      .meta-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin: 0.35rem 0 1.35rem;
+      }
+
+      .remember {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.7rem;
+        color: #43392d;
+      }
+
+      .remember input {
+        width: 1.1rem;
+        height: 1.1rem;
+        margin: 0;
+        padding: 0;
+        accent-color: var(--gold);
+      }
+
+      a {
+        color: var(--gold-deep);
+        text-decoration: none;
+      }
+
+      .submit {
+        width: 100%;
+        height: 3.35rem;
+        border: 0;
+        border-radius: 1rem;
+        cursor: pointer;
+        color: #fffdf8;
+        background: linear-gradient(180deg, #d3ae58 0%, #b98b31 100%);
+        box-shadow: 0 14px 24px rgba(185, 139, 49, 0.24);
+        font: 700 1rem/1 "Segoe UI", sans-serif;
+        letter-spacing: 0.01em;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+      }
+
+      .submit:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 18px 28px rgba(185, 139, 49, 0.28);
+      }
+
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        margin: 1.45rem 0 1.2rem;
+        color: #30261d;
+        font-weight: 700;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: "";
+        height: 1px;
+        flex: 1;
+        background: var(--line);
+      }
+
+      .socials {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
+      }
+
+      .social {
+        display: grid;
+        place-items: center;
+        height: 4rem;
+        border-radius: 1rem;
+        border: 1px solid rgba(140, 118, 79, 0.14);
+        background: rgba(255, 253, 249, 0.92);
+        color: #2d241b;
+        font-weight: 700;
+        font-size: 1.35rem;
+      }
+
+      .footer-copy {
+        margin-top: 1.35rem;
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .signup {
+        margin-top: 1.35rem;
+        text-align: center;
+        color: #4a4034;
+      }
+
+      @media (max-width: 1080px) {
+        .page {
+          grid-template-columns: 1fr;
+        }
+
+        .hero {
+          min-height: 48rem;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .shell {
+          padding: 0.75rem;
+        }
+
+        .page {
+          min-height: calc(100vh - 1.5rem);
+          border-radius: 1.4rem;
+        }
+
+        .hero,
+        .auth-wrap {
+          padding: 1.2rem;
+        }
+
+        .hero-main {
+          padding-top: 2rem;
+        }
+
+        .hero h1 {
+          max-width: 12ch;
+          font-size: 2.5rem;
+        }
+
+        .brand-row {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .auth-card {
+          padding: 1.35rem;
+          border-radius: 1.3rem;
+        }
+
+        .meta-row,
+        .footer-copy {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <main class="page">
+        <section class="hero">
+          <div class="brand-row">
+            <div class="brand">
+              <div class="brand-badge">LR</div>
+              <div class="brand-copy">
+                <strong>Lex<span>Reason</span></strong>
+                <small>Strategic Legal Memory</small>
+              </div>
+            </div>
+            <div class="hero-tag">Secure Counsel Workspace</div>
+          </div>
+
+          <div class="hero-main">
+            <span class="eyebrow">Private. Precise. Context Aware.</span>
+            <h1>Step back into your legal workflow.</h1>
+            <p>
+              Keep every brief, research trail, and chamber conversation
+              connected in one trusted workspace designed for lawyers who move
+              fast but cannot afford context loss.
+            </p>
+
+            <div class="hero-stats">
+              <div class="stat">
+                <strong>Case Memory</strong>
+                <span>Every matter retains its research and reasoning trail.</span>
+              </div>
+              <div class="stat">
+                <strong>Review First</strong>
+                <span>Strategic updates pause for approval before applying.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-footer">
+            <div class="quote">
+              <strong>Built for advocates who work across matters.</strong>
+              Cross-case queries stay deliberate, digests remain grounded in
+              source material, and legal reasoning stays traceable.
+            </div>
+
+            <div class="pills">
+              <span class="pill">Litigation</span>
+              <span class="pill">Case Digest</span>
+              <span class="pill">Research Notes</span>
+              <span class="pill">Chambers Memory</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="auth-wrap">
+          <div class="auth-card">
+            <div class="kicker">Member Access</div>
+            <h2>Welcome back to <span>LexReason</span></h2>
+            <p class="subtext">
+              Sign in to continue with your matters, saved arguments, and
+              context-aware legal research.
+            </p>
+
+            <form>
+              <div class="field">
+                <label for="email">Work Email</label>
+                <div class="input-wrap">
+                  <svg class="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M3 6.75h18v10.5H3z"></path>
+                    <path d="m4 8 8 6 8-6"></path>
+                  </svg>
+                  <input id="email" type="email" placeholder="deanna.curtis@example.com" />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="password">Password</label>
+                <div class="input-wrap">
+                  <svg class="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <rect x="5" y="10" width="14" height="10"></rect>
+                    <path d="M8 10V7.5a4 4 0 1 1 8 0V10"></path>
+                    <circle cx="12" cy="15" r="1"></circle>
+                    <path d="M12 15v2"></path>
+                  </svg>
+                  <input id="password" type="password" placeholder="Enter your password" />
+                  <svg class="trailing" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12Z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="role">Role</label>
+                <div class="select-wrap">
+                  <svg class="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="12" cy="8" r="3.5"></circle>
+                    <path d="M5 20a7 7 0 0 1 14 0"></path>
+                  </svg>
+                  <select id="role">
+                    <option>Independent Litigator</option>
+                    <option>Senior Counsel</option>
+                    <option>Corporate Counsel</option>
+                    <option>Research Associate</option>
+                  </select>
+                  <svg class="trailing" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="m6 9 6 6 6-6"></path>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="meta-row">
+                <label class="remember" for="remember">
+                  <input id="remember" type="checkbox" />
+                  <span>Remember me</span>
+                </label>
+                <a href="#">Forgot password?</a>
+              </div>
+
+              <button class="submit" type="submit">Enter Workspace</button>
+            </form>
+
+            <div class="divider">Or continue with</div>
+
+            <div class="socials">
+              <a class="social" href="#" aria-label="Continue with Google">G</a>
+              <a class="social" href="#" aria-label="Continue with Microsoft">M</a>
+              <a class="social" href="#" aria-label="Continue with LinkedIn">in</a>
+            </div>
+
+            <div class="footer-copy">
+              <span>Protected access for case-sensitive work.</span>
+              <span>256-bit encrypted</span>
+            </div>
+
+            <p class="signup">New here? <a href="#">Request an account</a></p>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
