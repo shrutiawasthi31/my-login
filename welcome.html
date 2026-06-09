@@ -98,8 +98,13 @@
       </div>
     </div>
     <script>
+      if (sessionStorage.getItem("lexreasonLoggedIn") !== "true") {
+        window.location.href = "index.html";
+      }
+
       document.getElementById("logout-button").addEventListener("click", function (event) {
         event.preventDefault();
+        sessionStorage.removeItem("lexreasonLoggedIn");
         window.location.href = "index.html";
       });
     </script>

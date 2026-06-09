@@ -429,6 +429,13 @@
         transform: translateY(-1px);
       }
 
+      .form-error {
+        min-height: 1.25rem;
+        margin: 0.65rem 0 0;
+        color: #a8472b;
+        font-size: 0.92rem;
+      }
+
       .divider {
         display: flex;
         align-items: center;
@@ -656,6 +663,7 @@
               </div>
 
               <button class="submit" type="submit">Enter Workspace</button>
+              <p class="form-error" id="form-error" aria-live="polite"></p>
               <a class="secondary-action" href="./welcome.html">Create New Account</a>
             </form>
 
@@ -683,6 +691,17 @@
     <script>
       document.getElementById("login-form").addEventListener("submit", function (event) {
         event.preventDefault();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const error = document.getElementById("form-error");
+
+        if (!email || !password) {
+          error.textContent = "Please enter your email and password.";
+          return;
+        }
+
+        error.textContent = "";
+        sessionStorage.setItem("lexreasonLoggedIn", "true");
         window.location.href = "welcome.html";
       });
     </script>
