@@ -602,7 +602,7 @@
               context-aware legal research.
             </p>
 
-            <form action="./welcome.html">
+            <form id="login-form">
               <div class="field">
                 <label for="email">Work Email</label>
                 <div class="input-wrap">
@@ -683,5 +683,11 @@
         </section>
       </main>
     </div>
+    <script>
+      document.getElementById("login-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        window.location.href = "welcome.html";
+      });
+    </script>
   </body>
 </html>
