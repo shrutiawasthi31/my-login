@@ -412,6 +412,26 @@
         box-shadow: 0 18px 28px rgba(185, 139, 49, 0.28);
       }
 
+      .secondary-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-top: 0.8rem;
+        height: 3.15rem;
+        border-radius: 1rem;
+        border: 1px solid rgba(185, 139, 49, 0.28);
+        background: rgba(255, 251, 244, 0.92);
+        color: #6d5220;
+        font-weight: 700;
+        transition: background 0.18s ease, transform 0.18s ease;
+      }
+
+      .secondary-action:hover {
+        background: rgba(250, 242, 225, 0.98);
+        transform: translateY(-1px);
+      }
+
       .divider {
         display: flex;
         align-items: center;
@@ -460,6 +480,13 @@
         margin-top: 1.35rem;
         text-align: center;
         color: #4a4034;
+      }
+
+      .signup strong {
+        display: block;
+        margin-bottom: 0.35rem;
+        font-size: 1rem;
+        color: #241d16;
       }
 
       @media (max-width: 1080px) {
@@ -575,7 +602,7 @@
               context-aware legal research.
             </p>
 
-            <form>
+            <form action="./welcome.html">
               <div class="field">
                 <label for="email">Work Email</label>
                 <div class="input-wrap">
@@ -632,6 +659,7 @@
               </div>
 
               <button class="submit" type="submit">Enter Workspace</button>
+              <a class="secondary-action" href="./welcome.html">Create New Account</a>
             </form>
 
             <div class="divider">Or continue with</div>
@@ -647,7 +675,10 @@
               <span>256-bit encrypted</span>
             </div>
 
-            <p class="signup">New here? <a href="#">Request an account</a></p>
+            <p class="signup">
+              <strong>New to LexReason?</strong>
+              <a href="./welcome.html">Sign up and start your workspace</a>
+            </p>
           </div>
         </section>
       </main>
