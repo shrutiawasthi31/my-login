@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test-static-site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify required files
+        run: |
+          test -f index.html
+          test -f welcome.html
+          test -f signup.html
+          test -f lawyer-hero.png
+
+      - name: Validate HTML content
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+
+          required = {
+              "index.html": [
+                  "LexReason Login",
+                  "Welcome back to <span>LexReason</span>",
+                  "Enter Workspace",
+                  "Create New Account",
+              ],
+              "signup.html": [
+                  "Create your workspace",
+                  "Sign Up",
+              ],
+              "welcome.html": [
+                  "Hello World",
+                  "Welcome to LexReason",
+                  "Logout",
+              ],
+          }
+
+          class Parser(HTMLParser):
+              def error(self, message):
+                  raise RuntimeError(message)
+
+          for filename, snippets in required.items():
+              text = Path(filename).read_text(encoding="utf-8")
+              Parser().feed(text)
+              for snippet in snippets:
+                  if snippet not in text:
+                      raise SystemExit(f"Missing expected content in {filename}: {snippet}")
+
+          print("HTML validation passed.")
+          PY
+
+      - name: Serve and smoke test
+        run: |
+          python3 -m http.server 8000 >/tmp/my-login-server.log 2>&1 &
+          SERVER_PID=$!
+          trap "kill $SERVER_PID" EXIT
+          sleep 2
+          curl -I http://127.0.0.1:8000/index.html
+          curl -s http://127.0.0.1:8000/index.html | grep "LexReason Login"
+          curl -s http://127.0.0.1:8000/signup.html | grep "Create your workspace"
+          curl -s http://127.0.0.1:8000/welcome.html | grep "Hello World"
