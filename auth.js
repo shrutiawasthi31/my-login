@@ -62,11 +62,19 @@ function setupOtpLogin() {
   });
 
   sendOtpButton?.addEventListener("click", async () => {
-    const phoneNumber = phoneInput?.value.trim();
+    const rawPhoneNumber = phoneInput?.value.trim();
+    const phoneNumber = normalizePhoneNumber(rawPhoneNumber);
 
     if (!phoneNumber) {
-      setStatus("Please enter your phone number in international format, for example +91 9876543210.", "error");
+      setStatus(
+        "Enter a valid phone number. You can use 9876543210, 09876543210, or +919876543210.",
+        "error"
+      );
       return;
+    }
+
+    if (phoneInput) {
+      phoneInput.value = phoneNumber;
     }
 
     setStatus("Sending OTP...", "info");
@@ -121,6 +129,34 @@ function persistUser(user, method) {
   };
 
   sessionStorage.setItem("lexreasonAuthUser", JSON.stringify(authUser));
+}
+
+function normalizePhoneNumber(value) {
+  if (!value) {
+    return "";
+  }
+
+  const cleaned = value.replace(/[^\d+]/g, "");
+
+  if (cleaned.startsWith("+") && /^\+[1-9]\d{7,14}$/.test(cleaned)) {
+    return cleaned;
+  }
+
+  const digits = cleaned.replace(/\D/g, "");
+
+  if (/^\d{10}$/.test(digits)) {
+    return `+91${digits}`;
+  }
+
+  if (/^0\d{10}$/.test(digits)) {
+    return `+91${digits.slice(1)}`;
+  }
+
+  if (/^91\d{10}$/.test(digits)) {
+    return `+${digits}`;
+  }
+
+  return "";
 }
 
 function setStatus(message, type) {
