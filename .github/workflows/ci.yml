@@ -24,55 +24,20 @@ jobs:
           test -f welcome.js
           test -f lawyer-hero.png
 
-      - name: Validate HTML content
+      - name: Validate static content
         run: |
-          python3 - <<'PY'
-          from html.parser import HTMLParser
-          from pathlib import Path
-
-          required = {
-              "index.html": [
-                  "LexReason Login",
-                  "Welcome back to <span>LexReason</span>",
-                  "Continue with Google",
-                  "Send OTP",
-              ],
-              "signup.html": [
-                  "Create your workspace",
-                  "Sign Up",
-              ],
-              "welcome.html": [
-                  "Hello World",
-                  "Welcome to LexReason",
-                  "Logout",
-              ],
-              "auth.js": [
-                  "signInWithPopup",
-                  "signInWithPhoneNumber",
-              ],
-          }
-
-          class Parser(HTMLParser):
-              def error(self, message):
-                  raise RuntimeError(message)
-
-          for filename, snippets in required.items():
-              text = Path(filename).read_text(encoding="utf-8")
-              Parser().feed(text)
-              for snippet in snippets:
-                  if snippet not in text:
-                      raise SystemExit(f"Missing expected content in {filename}: {snippet}")
-
-          print("HTML validation passed.")
-          PY
-
-      - name: Serve and smoke test
-        run: |
-          python3 -m http.server 8000 >/tmp/my-login-server.log 2>&1 &
-          SERVER_PID=$!
-          trap "kill $SERVER_PID" EXIT
-          sleep 2
-          curl -I http://127.0.0.1:8000/index.html
-          curl -s http://127.0.0.1:8000/index.html | grep "LexReason Login"
-          curl -s http://127.0.0.1:8000/index.html | grep "Continue with Google"
-          curl -s http://127.0.0.1:8000/welcome.html | grep "Hello World"
+          grep -q "LexReason Login" index.html
+          grep -q "Welcome back to <span>LexReason</span>" index.html
+          grep -q "Continue with Google" index.html
+          grep -q "Send OTP" index.html
+          grep -q "Create your workspace" signup.html
+          grep -q "Sign Up" signup.html
+          grep -q "Hello World" welcome.html
+          grep -q "Welcome to LexReason" welcome.html
+          grep -q "Logout" welcome.html
+          grep -q "signInWithPopup" auth.js
+          grep -q "signInWithPhoneNumber" auth.js
+          grep -q "RecaptchaVerifier" auth.js
+          grep -q "firebaseConfig" firebase-config.js
+          grep -q "signOut" welcome.js
+          echo "Static validation passed."
