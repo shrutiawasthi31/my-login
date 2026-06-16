@@ -1,12 +1,28 @@
-# LexReason Login Page
+# LexReason Firebase Login Page
 
-Static login page designed in a premium legal-tech style and ready for GitHub Pages deployment through GitHub Actions.
+Static login page designed in a premium legal-tech style with Firebase Authentication for Google sign-in and phone OTP login.
 
 ## Files
 
 - `index.html` - the deployable login page
+- `auth.js` - Google and phone OTP login logic
+- `firebase-config.js` - Firebase web configuration placeholders
 - `login-reference.png` - the hero image used in the left panel
-- `.github/workflows/deploy.yml` - CI workflow that deploys the site to GitHub Pages
+- `welcome.html` - post-login hello world / welcome page
+- `welcome.js` - welcome page session handling and logout
+- `.github/workflows/ci.yml` - CI validation workflow
+- `.github/workflows/deploy.yml` - Pages deployment workflow
+
+## Firebase setup
+
+1. Create a Firebase project.
+2. In Firebase Console, create a Web App.
+3. Copy your Firebase web config into `firebase-config.js`.
+4. In Firebase Authentication, enable:
+   - `Google`
+   - `Phone`
+5. Add your GitHub Pages domain to authorized domains if needed.
+6. For phone auth, use numbers in international format such as `+91xxxxxxxxxx`.
 
 ## Local preview
 

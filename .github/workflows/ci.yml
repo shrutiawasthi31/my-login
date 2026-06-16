@@ -19,6 +19,9 @@ jobs:
           test -f index.html
           test -f welcome.html
           test -f signup.html
+          test -f auth.js
+          test -f firebase-config.js
+          test -f welcome.js
           test -f lawyer-hero.png
 
       - name: Validate HTML content
@@ -31,8 +34,8 @@ jobs:
               "index.html": [
                   "LexReason Login",
                   "Welcome back to <span>LexReason</span>",
-                  "Enter Workspace",
-                  "Create New Account",
+                  "Continue with Google",
+                  "Send OTP",
               ],
               "signup.html": [
                   "Create your workspace",
@@ -42,6 +45,10 @@ jobs:
                   "Hello World",
                   "Welcome to LexReason",
                   "Logout",
+              ],
+              "auth.js": [
+                  "signInWithPopup",
+                  "signInWithPhoneNumber",
               ],
           }
 
@@ -67,5 +74,5 @@ jobs:
           sleep 2
           curl -I http://127.0.0.1:8000/index.html
           curl -s http://127.0.0.1:8000/index.html | grep "LexReason Login"
-          curl -s http://127.0.0.1:8000/signup.html | grep "Create your workspace"
+          curl -s http://127.0.0.1:8000/index.html | grep "Continue with Google"
           curl -s http://127.0.0.1:8000/welcome.html | grep "Hello World"

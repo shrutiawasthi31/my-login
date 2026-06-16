@@ -213,7 +213,16 @@
         }
 
         error.textContent = "";
-        sessionStorage.setItem("lexreasonLoggedIn", "true");
+        sessionStorage.setItem(
+          "lexreasonAuthUser",
+          JSON.stringify({
+            uid: "local-signup-demo",
+            displayName: fullName,
+            email: email,
+            phoneNumber: "",
+            loginMethod: "signup-demo"
+          })
+        );
         window.location.href = "welcome.html";
       });
     </script>

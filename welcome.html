@@ -63,6 +63,21 @@
         font-size: 1.05rem;
       }
 
+      .user-meta {
+        margin: 0 0 1.6rem;
+        padding: 1rem 1.1rem;
+        border-radius: 1rem;
+        background: rgba(201, 162, 77, 0.08);
+        border: 1px solid rgba(170, 125, 34, 0.14);
+        text-align: left;
+      }
+
+      .user-meta strong {
+        display: block;
+        margin-bottom: 0.35rem;
+        color: #1d1812;
+      }
+
       .button {
         display: inline-flex;
         align-items: center;
@@ -93,20 +108,14 @@
     <div class="shell">
       <div class="card">
         <h1>Hello World</h1>
-        <p>Welcome to LexReason</p>
+        <p id="welcome-copy">Welcome to LexReason</p>
+        <div class="user-meta" id="user-meta">
+          <strong>Signed in user</strong>
+          <span id="user-details">Loading session details...</span>
+        </div>
         <a class="button" href="./index.html" id="logout-button">Logout</a>
       </div>
     </div>
-    <script>
-      if (sessionStorage.getItem("lexreasonLoggedIn") !== "true") {
-        window.location.href = "index.html";
-      }
-
-      document.getElementById("logout-button").addEventListener("click", function (event) {
-        event.preventDefault();
-        sessionStorage.removeItem("lexreasonLoggedIn");
-        window.location.href = "index.html";
-      });
-    </script>
+    <script type="module" src="./welcome.js"></script>
   </body>
 </html>
