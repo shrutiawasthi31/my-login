@@ -269,8 +269,8 @@
       .auth-card {
         position: relative;
         z-index: 1;
-        width: min(100%, 27rem);
-        padding: 2.4rem 2.2rem 2rem;
+        width: min(100%, 26rem);
+        padding: 2.5rem 2.35rem 2.1rem;
         border-radius: 1.9rem;
         background: rgba(255, 255, 255, 0.96);
         border: 1px solid rgba(201, 162, 77, 0.12);
@@ -304,6 +304,11 @@
         color: #777062;
         line-height: 1.6;
         font-size: 0.98rem;
+      }
+
+      .form-grid {
+        display: grid;
+        gap: 0.95rem;
       }
 
       .field {
@@ -375,6 +380,13 @@
         box-shadow: 0 14px 24px rgba(185, 139, 49, 0.24);
       }
 
+      .submit:hover,
+      .secondary-action:hover,
+      .social:hover,
+      .social-icon:hover {
+        transform: translateY(-1px);
+      }
+
       .submit:disabled,
       .secondary-action:disabled,
       .social:disabled {
@@ -407,7 +419,7 @@
         display: flex;
         align-items: center;
         gap: 0.85rem;
-        margin: 1.35rem 0 1.1rem;
+        margin: 1.4rem 0 1.05rem;
         color: #2c261f;
         font-weight: 700;
       }
@@ -429,6 +441,33 @@
       .otp-actions {
         display: grid;
         gap: 0.8rem;
+      }
+
+      .social-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
+        margin-top: 1rem;
+      }
+
+      .social-icon {
+        min-height: 4.2rem;
+        border-radius: 0.95rem;
+        border: 1px solid rgba(185, 139, 49, 0.18);
+        background: #fff;
+        display: grid;
+        place-items: center;
+        color: #2b251f;
+        font: 700 1.55rem/1 "Segoe UI", sans-serif;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .social-icon.facebook {
+        color: #1877f2;
+      }
+
+      .social-icon.linkedin {
+        color: #0a66c2;
       }
 
       .footer-copy,
@@ -502,6 +541,12 @@
         color: #fff;
         font-size: 0.9rem;
         background: conic-gradient(from 180deg, #34a853 0 25%, #4285f4 25% 50%, #fbbc05 50% 75%, #ea4335 75% 100%);
+      }
+
+      .social-icon .google-mark {
+        width: 1.7rem;
+        height: 1.7rem;
+        font-size: 1rem;
       }
 
       .helper-row {
@@ -629,62 +674,72 @@
               Sign in with your Google account or continue with phone OTP.
             </p>
 
-            <div class="auth-stack">
-              <button class="social" id="google-login" type="button" aria-label="Continue with Google">
-                <span class="google-mark">G</span>
-                <span>Continue with Google</span>
-              </button>
-            </div>
-
-            <div class="section-divider">Or login with OTP</div>
-
-            <div class="otp-box">
-              <div class="field">
-                <label for="phone-number">Phone Number</label>
-                <div class="input-wrap">
-                  <svg class="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path d="M7 2h10v20H7z"></path>
-                    <path d="M11 18h2"></path>
-                  </svg>
-                  <input id="phone-number" type="tel" placeholder="+91 9876543210" />
-                </div>
+            <div class="form-grid">
+              <div class="auth-stack">
+                <button class="social" id="google-login" type="button" aria-label="Continue with Google">
+                  <span class="google-mark">G</span>
+                  <span>Continue with Google</span>
+                </button>
               </div>
 
-              <div class="helper-row">
-                <span>Use country code for OTP login</span>
-                <span>India: +91</span>
-              </div>
+              <div class="section-divider">Or login with OTP</div>
 
-              <div id="recaptcha-container"></div>
-
-              <div class="otp-actions">
-                <button class="submit" id="send-otp" type="button">Send OTP</button>
-
+              <div class="otp-box">
                 <div class="field">
-                  <label for="otp-code">Enter OTP</label>
+                  <label for="phone-number">Phone Number</label>
                   <div class="input-wrap">
                     <svg class="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                      <rect x="4" y="5" width="16" height="14"></rect>
-                      <path d="m4 7 8 5 8-5"></path>
+                      <path d="M7 2h10v20H7z"></path>
+                      <path d="M11 18h2"></path>
                     </svg>
-                    <input id="otp-code" type="text" inputmode="numeric" placeholder="6-digit code" />
+                    <input id="phone-number" type="tel" placeholder="+91 9876543210" />
                   </div>
                 </div>
 
-                <button class="secondary-action" id="verify-otp" type="button">Verify OTP</button>
+                <div class="helper-row">
+                  <span>Use country code for OTP login</span>
+                  <span>India: +91</span>
+                </div>
+
+                <div id="recaptcha-container"></div>
+
+                <div class="otp-actions">
+                  <button class="submit" id="send-otp" type="button">Send OTP</button>
+
+                  <div class="field">
+                    <label for="otp-code">Enter OTP</label>
+                    <div class="input-wrap">
+                      <svg class="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <rect x="4" y="5" width="16" height="14"></rect>
+                        <path d="m4 7 8 5 8-5"></path>
+                      </svg>
+                      <input id="otp-code" type="text" inputmode="numeric" placeholder="6-digit code" />
+                    </div>
+                  </div>
+
+                  <button class="secondary-action" id="verify-otp" type="button">Verify OTP</button>
+                </div>
               </div>
+
+              <div class="section-divider">Or Continue With</div>
+
+              <div class="social-row" aria-hidden="true">
+                <div class="social-icon"><span class="google-mark">G</span></div>
+                <div class="social-icon facebook">f</div>
+                <div class="social-icon linkedin">in</div>
+              </div>
+
+              <div class="form-status" id="auth-status" aria-live="polite"></div>
+
+              <div class="footer-copy">
+                <span>Protected access for case-sensitive work.</span>
+                <span>256-bit encrypted</span>
+              </div>
+
+              <p class="signup">
+                <strong>New to LexReason? <a href="./signup.html">Sign up</a></strong>
+              </p>
             </div>
-
-            <div class="form-status" id="auth-status" aria-live="polite"></div>
-
-            <div class="footer-copy">
-              <span>Protected access for case-sensitive work.</span>
-              <span>256-bit encrypted</span>
-            </div>
-
-            <p class="signup">
-              <strong>New to LexReason? <a href="./signup.html">Sign up</a></strong>
-            </p>
           </div>
         </section>
       </main>
