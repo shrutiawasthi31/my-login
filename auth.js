@@ -57,8 +57,12 @@ function setupGoogleLogin() {
 }
 
 function setupOtpLogin() {
-  recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-    size: "normal"
+  phoneInput?.addEventListener("input", () => {
+    clearStatus();
+  });
+
+  otpInput?.addEventListener("input", () => {
+    clearStatus();
   });
 
   sendOtpButton?.addEventListener("click", async () => {
@@ -80,10 +84,11 @@ function setupOtpLogin() {
     setStatus("Sending OTP...", "info");
 
     try {
+      ensureRecaptcha();
       confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
       setStatus("OTP sent successfully. Enter the code you received.", "success");
     } catch (error) {
-      setStatus(error.message || "Unable to send OTP.", "error");
+      setStatus(getFriendlyOtpError(error), "error");
       try {
         recaptchaVerifier.render().then((widgetId) => {
           window.grecaptcha?.reset(widgetId);
@@ -114,7 +119,7 @@ function setupOtpLogin() {
       persistUser(result.user, "phone");
       window.location.href = "./welcome.html";
     } catch (error) {
-      setStatus(error.message || "OTP verification failed.", "error");
+      setStatus(getFriendlyOtpError(error, "verify"), "error");
     }
   });
 }
@@ -157,6 +162,59 @@ function normalizePhoneNumber(value) {
   }
 
   return "";
+}
+
+function ensureRecaptcha() {
+  if (!recaptchaVerifier) {
+    recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+      size: "normal"
+    });
+  }
+
+  return recaptchaVerifier;
+}
+
+function getFriendlyOtpError(error, phase = "send") {
+  const code = error?.code || "";
+
+  if (code === "auth/invalid-phone-number") {
+    return "Use a valid mobile number. Try 9876543210 or +919876543210.";
+  }
+
+  if (code === "auth/missing-phone-number") {
+    return "Enter your mobile number first.";
+  }
+
+  if (code === "auth/captcha-check-failed") {
+    return "reCAPTCHA did not complete. Please try Send OTP once more.";
+  }
+
+  if (code === "auth/too-many-requests") {
+    return "Too many OTP attempts were made. Please wait a little and try again.";
+  }
+
+  if (code === "auth/invalid-verification-code") {
+    return "The OTP code is incorrect. Please check it and try again.";
+  }
+
+  if (code === "auth/code-expired") {
+    return "This OTP has expired. Please request a new one.";
+  }
+
+  if (phase === "verify") {
+    return "OTP verification failed. Please try again.";
+  }
+
+  return "Unable to send OTP right now. Please check Firebase Phone sign-in and try again.";
+}
+
+function clearStatus() {
+  if (!statusBox) {
+    return;
+  }
+
+  statusBox.className = "form-status";
+  statusBox.textContent = "";
 }
 
 function setStatus(message, type) {
