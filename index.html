@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LexReason Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         --cream: #f5efe5;
@@ -13,6 +19,8 @@
         --line: rgba(150, 126, 83, 0.18);
         --gold: #c9a24d;
         --gold-deep: #aa7d22;
+        --paper: #fffdfa;
+        --paper-shadow: rgba(84, 59, 18, 0.14);
         --danger: #a8472b;
         --success: #236b45;
         --info: #355d8a;
@@ -26,7 +34,7 @@
         margin: 0;
         min-height: 100vh;
         color: var(--ink);
-        font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        font-family: "Manrope", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
         background:
           radial-gradient(circle at top left, rgba(201, 162, 77, 0.22), transparent 28%),
           radial-gradient(circle at 80% 10%, rgba(89, 98, 74, 0.11), transparent 24%),
@@ -241,7 +249,9 @@
         display: grid;
         place-items: center;
         padding: 2.5rem;
-        background: linear-gradient(180deg, #f7f3ec 0%, #efe7da 100%);
+        background:
+          radial-gradient(circle at top, rgba(255, 255, 255, 0.7), transparent 26%),
+          linear-gradient(180deg, #f6f1e8 0%, #ede2d0 100%);
       }
 
       .auth-wrap::before,
@@ -256,7 +266,7 @@
         inset: 1.8rem auto auto 2rem;
         width: 8rem;
         height: 8rem;
-        background: radial-gradient(circle, rgba(201, 162, 77, 0.18), rgba(201, 162, 77, 0));
+        background: radial-gradient(circle, rgba(201, 162, 77, 0.16), rgba(201, 162, 77, 0));
       }
 
       .auth-wrap::after {
@@ -269,46 +279,63 @@
       .auth-card {
         position: relative;
         z-index: 1;
-        width: min(100%, 26rem);
-        padding: 2.5rem 2.35rem 2.1rem;
-        border-radius: 1.9rem;
-        background: rgba(255, 255, 255, 0.96);
-        border: 1px solid rgba(201, 162, 77, 0.12);
+        width: min(100%, 27.25rem);
+        padding: 2.7rem 2.5rem 2.25rem;
+        border-radius: 2rem;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(253, 248, 240, 0.98));
+        border: 1px solid rgba(186, 149, 78, 0.16);
         box-shadow:
-          0 24px 60px rgba(78, 53, 13, 0.1),
-          inset 0 1px 0 rgba(255, 255, 255, 0.88);
+          0 26px 70px var(--paper-shadow),
+          0 10px 24px rgba(255, 255, 255, 0.45) inset;
+      }
+
+      .auth-card::before {
+        content: "";
+        position: absolute;
+        inset: 1.1rem 1.1rem auto auto;
+        width: 4.5rem;
+        height: 4.5rem;
+        border-radius: 1.2rem;
+        background: linear-gradient(145deg, rgba(201, 162, 77, 0.16), rgba(201, 162, 77, 0));
+        pointer-events: none;
       }
 
       .kicker {
         display: inline-block;
-        margin-bottom: 0.85rem;
-        color: #8b7f6a;
-        font-size: 0.78rem;
-        letter-spacing: 0.14em;
+        margin-bottom: 1rem;
+        padding-bottom: 0.3rem;
+        color: #8e7d60;
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
         text-transform: uppercase;
+        border-bottom: 1px solid rgba(186, 149, 78, 0.25);
       }
 
       .auth-card h2 {
         margin: 0;
-        color: #201a15;
-        font: 700 clamp(2rem, 4vw, 2.85rem) / 1.02 "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        color: #221a13;
+        font: 700 clamp(2.45rem, 4vw, 3.15rem) / 0.92 "Cormorant Garamond", Georgia, serif;
+        letter-spacing: -0.02em;
       }
 
       .auth-card h2 span {
-        color: #3b3731;
-        font-weight: 400;
+        color: #50453a;
+        font-weight: 600;
       }
 
       .subtext {
-        margin: 0.55rem 0 1.6rem;
-        color: #777062;
-        line-height: 1.6;
-        font-size: 0.98rem;
+        margin: 0.75rem 0 1.7rem;
+        max-width: 28ch;
+        color: #766a5a;
+        line-height: 1.65;
+        font-size: 0.95rem;
       }
 
       .form-grid {
         display: grid;
-        gap: 0.95rem;
+        gap: 1rem;
       }
 
       .field {
@@ -318,8 +345,9 @@
       .field label {
         display: block;
         margin-bottom: 0.55rem;
-        color: #2b251f;
-        font-weight: 600;
+        color: #32281f;
+        font-size: 0.9rem;
+        font-weight: 700;
       }
 
       .input-wrap {
@@ -341,14 +369,15 @@
 
       input {
         width: 100%;
-        height: 3.2rem;
-        border-radius: 0.9rem;
-        border: 1px solid rgba(140, 118, 79, 0.15);
-        background: #fff;
+        height: 3.35rem;
+        border-radius: 1rem;
+        border: 1px solid rgba(140, 118, 79, 0.14);
+        background: rgba(255, 255, 255, 0.94);
         padding: 0 1rem 0 3rem;
         color: #241d16;
         outline: none;
-        font: inherit;
+        font: 500 0.95rem/1.2 "Manrope", sans-serif;
+        letter-spacing: -0.01em;
         transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
       }
 
@@ -366,24 +395,30 @@
       .secondary-action,
       .social {
         width: 100%;
-        min-height: 3.15rem;
-        border-radius: 0.9rem;
+        min-height: 3.25rem;
+        border-radius: 1rem;
         font-weight: 700;
-        font: 700 1rem/1 "Segoe UI", sans-serif;
+        font: 700 0.96rem/1 "Manrope", sans-serif;
+        letter-spacing: 0.01em;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
       }
 
       .submit {
         border: 0;
         cursor: pointer;
         color: #fffdf8;
-        background: linear-gradient(180deg, #d3ae58 0%, #b98b31 100%);
-        box-shadow: 0 14px 24px rgba(185, 139, 49, 0.24);
+        background: linear-gradient(180deg, #d8b25a 0%, #b9892d 100%);
+        box-shadow: 0 16px 28px rgba(185, 139, 49, 0.24);
       }
 
       .submit:hover,
       .secondary-action:hover,
       .social:hover {
         transform: translateY(-1px);
+      }
+
+      .submit:hover {
+        box-shadow: 0 18px 32px rgba(185, 139, 49, 0.28);
       }
 
       .submit:disabled,
@@ -398,15 +433,18 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid rgba(185, 139, 49, 0.2);
-        background: #fff;
-        color: #4a3a1f;
+        border: 1px solid rgba(185, 139, 49, 0.18);
+        background: rgba(255, 255, 255, 0.9);
+        color: #43341b;
         text-decoration: none;
         cursor: pointer;
       }
 
       .social {
-        gap: 0.6rem;
+        gap: 0.7rem;
+        justify-content: flex-start;
+        padding: 0 1.15rem;
+        box-shadow: 0 10px 22px rgba(96, 74, 30, 0.06);
       }
 
       .auth-stack {
@@ -418,9 +456,12 @@
         display: flex;
         align-items: center;
         gap: 0.85rem;
-        margin: 1.4rem 0 1.05rem;
-        color: #2c261f;
-        font-weight: 700;
+        margin: 1.45rem 0 1.1rem;
+        color: #463828;
+        font-size: 0.88rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
       }
 
       .section-divider::before,
@@ -439,7 +480,7 @@
 
       .otp-actions {
         display: grid;
-        gap: 0.8rem;
+        gap: 0.9rem;
       }
 
       .footer-copy,
@@ -457,10 +498,11 @@
       .form-status {
         display: none;
         margin-top: 1rem;
-        padding: 0.9rem 1rem;
-        border-radius: 0.9rem;
-        font-size: 0.92rem;
-        line-height: 1.5;
+        padding: 0.95rem 1rem;
+        border-radius: 1rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        line-height: 1.55;
       }
 
       .form-status.show {
@@ -486,22 +528,33 @@
       }
 
       .footer-copy {
-        margin-top: 1.2rem;
+        margin-top: 1.4rem;
         display: flex;
         justify-content: space-between;
         gap: 1rem;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
       }
 
       .signup {
-        margin-top: 1.45rem;
+        margin-top: 1.6rem;
         text-align: center;
-        color: #4a4034;
+        color: #5e5245;
       }
 
       .signup strong {
-        font-size: 1rem;
-        color: #241d16;
+        font-size: 0.95rem;
+        color: #2a2118;
+      }
+
+      .signup a {
+        color: var(--gold-deep);
+        text-decoration: none;
+      }
+
+      .signup a:hover {
+        text-decoration: underline;
       }
 
       .google-mark {
@@ -519,9 +572,10 @@
         display: flex;
         justify-content: space-between;
         gap: 0.75rem;
-        margin: 0.2rem 0 0.9rem;
-        color: #8b7a5a;
-        font-size: 0.88rem;
+        margin: 0.25rem 0 1rem;
+        color: #89785c;
+        font-size: 0.82rem;
+        font-weight: 600;
       }
 
       .helper-row span:last-child {
@@ -569,8 +623,9 @@
         }
 
         .auth-card {
-          padding: 1.35rem;
-          border-radius: 1.3rem;
+          width: min(100%, 28rem);
+          padding: 1.45rem;
+          border-radius: 1.45rem;
         }
 
         .footer-copy {
