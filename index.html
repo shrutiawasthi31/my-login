@@ -54,7 +54,7 @@
       .page {
         min-height: calc(100vh - 2.5rem);
         display: grid;
-        grid-template-columns: minmax(0, 1.2fr) minmax(420px, 0.8fr);
+        grid-template-columns: minmax(0, 1.06fr) minmax(520px, 0.94fr);
         border-radius: 2rem;
         overflow: hidden;
         background: rgba(255, 251, 245, 0.62);
@@ -253,7 +253,7 @@
         position: relative;
         display: grid;
         place-items: center;
-        padding: 2.5rem;
+        padding: 2.8rem 3rem;
         background:
           radial-gradient(circle at top, rgba(255, 255, 255, 0.7), transparent 26%),
           linear-gradient(180deg, #f6f1e8 0%, #ede2d0 100%);
@@ -284,8 +284,8 @@
       .auth-card {
         position: relative;
         z-index: 1;
-        width: min(100%, 27.25rem);
-        padding: 2.7rem 2.5rem 2.25rem;
+        width: min(100%, 31rem);
+        padding: 2.9rem 2.85rem 2.45rem;
         border-radius: 2rem;
         background:
           linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(253, 248, 240, 0.98));
@@ -332,7 +332,7 @@
 
       .subtext {
         margin: var(--space-1) 0 var(--space-4);
-        max-width: 28ch;
+        max-width: 33ch;
         color: #766a5a;
         line-height: 1.65;
         font-size: 0.95rem;
@@ -448,8 +448,12 @@
       .social {
         gap: 0.7rem;
         justify-content: flex-start;
-        padding: 0 1.15rem;
+        padding: 0 1.25rem;
         box-shadow: 0 10px 22px rgba(96, 74, 30, 0.06);
+      }
+
+      .social span:last-child {
+        font-size: 0.98rem;
       }
 
       .auth-stack {
@@ -478,7 +482,7 @@
       }
 
       .otp-box {
-        padding: 0;
+        padding: 0.2rem 0 0;
         background: transparent;
         border: 0;
       }
@@ -540,10 +544,12 @@
         font-size: 0.8rem;
         font-weight: 600;
         letter-spacing: 0.01em;
+        padding-top: 0.4rem;
+        border-top: 1px solid rgba(186, 149, 78, 0.15);
       }
 
       .signup {
-        margin-top: 0.2rem;
+        margin-top: 0.35rem;
         text-align: center;
         color: #5e5245;
       }
@@ -617,7 +623,7 @@
         }
 
         .auth-card {
-          width: min(100%, 28rem);
+          width: min(100%, 100%);
           padding: 1.55rem;
           border-radius: 1.45rem;
         }
