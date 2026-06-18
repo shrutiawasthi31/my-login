@@ -382,8 +382,7 @@
 
       .submit:hover,
       .secondary-action:hover,
-      .social:hover,
-      .social-icon:hover {
+      .social:hover {
         transform: translateY(-1px);
       }
 
@@ -441,33 +440,6 @@
       .otp-actions {
         display: grid;
         gap: 0.8rem;
-      }
-
-      .social-row {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.8rem;
-        margin-top: 1rem;
-      }
-
-      .social-icon {
-        min-height: 4.2rem;
-        border-radius: 0.95rem;
-        border: 1px solid rgba(185, 139, 49, 0.18);
-        background: #fff;
-        display: grid;
-        place-items: center;
-        color: #2b251f;
-        font: 700 1.55rem/1 "Segoe UI", sans-serif;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
-
-      .social-icon.facebook {
-        color: #1877f2;
-      }
-
-      .social-icon.linkedin {
-        color: #0a66c2;
       }
 
       .footer-copy,
@@ -541,12 +513,6 @@
         color: #fff;
         font-size: 0.9rem;
         background: conic-gradient(from 180deg, #34a853 0 25%, #4285f4 25% 50%, #fbbc05 50% 75%, #ea4335 75% 100%);
-      }
-
-      .social-icon .google-mark {
-        width: 1.7rem;
-        height: 1.7rem;
-        font-size: 1rem;
       }
 
       .helper-row {
@@ -719,14 +685,6 @@
 
                   <button class="secondary-action" id="verify-otp" type="button">Verify OTP</button>
                 </div>
-              </div>
-
-              <div class="section-divider">Or Continue With</div>
-
-              <div class="social-row" aria-hidden="true">
-                <div class="social-icon"><span class="google-mark">G</span></div>
-                <div class="social-icon facebook">f</div>
-                <div class="social-icon linkedin">in</div>
               </div>
 
               <div class="form-status" id="auth-status" aria-live="polite"></div>
