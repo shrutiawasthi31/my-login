@@ -18,6 +18,7 @@ const statusBox = document.getElementById("auth-status");
 let auth;
 let confirmationResult;
 let recaptchaVerifier;
+let recaptchaWidgetId;
 
 if (!hasFirebaseConfig) {
   setStatus(
@@ -28,6 +29,7 @@ if (!hasFirebaseConfig) {
 } else {
   const app = initializeApp(firebaseConfig);
   auth = getAuth(app);
+  auth.languageCode = "en";
   setupGoogleLogin();
   setupOtpLogin();
 }
@@ -57,6 +59,8 @@ function setupGoogleLogin() {
 }
 
 function setupOtpLogin() {
+  toggleOtpButtons(false);
+
   phoneInput?.addEventListener("input", () => {
     clearStatus();
   });
@@ -81,21 +85,21 @@ function setupOtpLogin() {
       phoneInput.value = phoneNumber;
     }
 
+    toggleOtpButtons(true);
     setStatus("Sending OTP...", "info");
 
     try {
-      ensureRecaptcha();
+      await ensureRecaptcha();
       confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
+      if (otpInput) {
+        otpInput.focus();
+      }
+      toggleOtpButtons(false, true);
       setStatus("OTP sent successfully. Enter the code you received.", "success");
     } catch (error) {
+      toggleOtpButtons(false);
       setStatus(getFriendlyOtpError(error), "error");
-      try {
-        recaptchaVerifier.render().then((widgetId) => {
-          window.grecaptcha?.reset(widgetId);
-        });
-      } catch {
-        // Ignore recaptcha reset issues.
-      }
+      resetRecaptcha();
     }
   });
 
@@ -112,6 +116,7 @@ function setupOtpLogin() {
       return;
     }
 
+    verifyOtpButton.disabled = true;
     setStatus("Verifying OTP...", "info");
 
     try {
@@ -119,6 +124,7 @@ function setupOtpLogin() {
       persistUser(result.user, "phone");
       window.location.href = "./welcome.html";
     } catch (error) {
+      verifyOtpButton.disabled = false;
       setStatus(getFriendlyOtpError(error, "verify"), "error");
     }
   });
@@ -164,11 +170,15 @@ function normalizePhoneNumber(value) {
   return "";
 }
 
-function ensureRecaptcha() {
+async function ensureRecaptcha() {
   if (!recaptchaVerifier) {
     recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
       size: "normal"
     });
+  }
+
+  if (recaptchaWidgetId == null) {
+    recaptchaWidgetId = await recaptchaVerifier.render();
   }
 
   return recaptchaVerifier;
@@ -189,8 +199,24 @@ function getFriendlyOtpError(error, phase = "send") {
     return "reCAPTCHA did not complete. Please try Send OTP once more.";
   }
 
+  if (code === "auth/missing-app-credential") {
+    return "reCAPTCHA did not finish properly. Please complete it and send the OTP again.";
+  }
+
   if (code === "auth/too-many-requests") {
     return "Too many OTP attempts were made. Please wait a little and try again.";
+  }
+
+  if (code === "auth/quota-exceeded") {
+    return "Firebase SMS quota is exhausted for now. Please wait and try again later.";
+  }
+
+  if (code === "auth/operation-not-allowed") {
+    return "Phone sign-in is not enabled in Firebase Authentication for this project.";
+  }
+
+  if (code === "auth/unauthorized-domain") {
+    return "This website domain is not authorized in Firebase Authentication settings.";
   }
 
   if (code === "auth/invalid-verification-code") {
@@ -215,6 +241,26 @@ function clearStatus() {
 
   statusBox.className = "form-status";
   statusBox.textContent = "";
+}
+
+function toggleOtpButtons(isSending, otpReady = false) {
+  if (sendOtpButton) {
+    sendOtpButton.disabled = isSending;
+  }
+
+  if (verifyOtpButton) {
+    verifyOtpButton.disabled = isSending || !otpReady;
+  }
+}
+
+function resetRecaptcha() {
+  try {
+    if (recaptchaWidgetId != null && window.grecaptcha) {
+      window.grecaptcha.reset(recaptchaWidgetId);
+    }
+  } catch {
+    // Ignore recaptcha reset issues.
+  }
 }
 
 function setStatus(message, type) {
