@@ -19,6 +19,7 @@ let auth;
 let confirmationResult;
 let recaptchaVerifier;
 let recaptchaWidgetId;
+const OTP_REQUEST_TIMEOUT_MS = 25000;
 
 if (!hasFirebaseConfig) {
   setStatus(
@@ -86,17 +87,23 @@ function setupOtpLogin() {
     }
 
     toggleOtpButtons(true);
-    setStatus("Sending OTP...", "info");
+    setStatus("Preparing verification challenge...", "info");
 
     try {
       await ensureRecaptcha();
-      confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
+      setStatus("Sending OTP. If prompted, complete the reCAPTCHA challenge first.", "info");
+      confirmationResult = await withTimeout(
+        signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier),
+        OTP_REQUEST_TIMEOUT_MS
+      );
+      console.info("Firebase OTP request accepted for", phoneNumber);
       if (otpInput) {
         otpInput.focus();
       }
       toggleOtpButtons(false, true);
       setStatus("OTP sent successfully. Enter the code you received.", "success");
     } catch (error) {
+      console.error("Firebase OTP send failed", error);
       toggleOtpButtons(false);
       setStatus(getFriendlyOtpError(error), "error");
       resetRecaptcha();
@@ -173,12 +180,20 @@ function normalizePhoneNumber(value) {
 async function ensureRecaptcha() {
   if (!recaptchaVerifier) {
     recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-      size: "normal"
+      size: "normal",
+      callback: () => {
+        setStatus("reCAPTCHA verified. Sending OTP...", "info");
+      },
+      "expired-callback": () => {
+        toggleOtpButtons(false);
+        setStatus("reCAPTCHA expired. Please click Send OTP and try again.", "error");
+      }
     });
   }
 
   if (recaptchaWidgetId == null) {
     recaptchaWidgetId = await recaptchaVerifier.render();
+    console.info("Firebase reCAPTCHA rendered", recaptchaWidgetId);
   }
 
   return recaptchaVerifier;
@@ -219,6 +234,10 @@ function getFriendlyOtpError(error, phase = "send") {
     return "This website domain is not authorized in Firebase Authentication settings.";
   }
 
+  if (code === "otp/request-timeout") {
+    return "Firebase did not finish the OTP request in time. This usually means the reCAPTCHA challenge or SMS delivery step is being blocked.";
+  }
+
   if (code === "auth/invalid-verification-code") {
     return "The OTP code is incorrect. Please check it and try again.";
   }
@@ -232,6 +251,17 @@ function getFriendlyOtpError(error, phase = "send") {
   }
 
   return "Unable to send OTP right now. Please check Firebase Phone sign-in and try again.";
+}
+
+function withTimeout(promise, timeoutMs) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      window.setTimeout(() => {
+        reject({ code: "otp/request-timeout" });
+      }, timeoutMs);
+    })
+  ]);
 }
 
 function clearStatus() {
