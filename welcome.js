@@ -23,7 +23,7 @@ if (!storedUser) {
   const identity = user.email || user.phoneNumber || "LexReason Member";
   const methodLabel = user.loginMethod === "phone" ? "Phone OTP" : "Google";
 
-  welcomeCopy.textContent = `Welcome to LexReason, ${user.displayName || "Member"}.`;
+  welcomeCopy.innerHTML = `Welcome to <span>LexReason</span>`;
   userDetails.textContent = `${identity} | Login method: ${methodLabel}`;
 }
 
