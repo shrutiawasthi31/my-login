@@ -201,6 +201,7 @@ async function ensureRecaptcha() {
 
 function getFriendlyOtpError(error, phase = "send") {
   const code = error?.code || "";
+  const message = typeof error?.message === "string" ? error.message.trim() : "";
 
   if (code === "auth/invalid-phone-number") {
     return "Use a valid mobile number. Try 9876543210 or +919876543210.";
@@ -250,7 +251,11 @@ function getFriendlyOtpError(error, phase = "send") {
     return "OTP verification failed. Please try again.";
   }
 
-  return "Unable to send OTP right now. Please check Firebase Phone sign-in and try again.";
+  if (code || message) {
+    return `Unable to send OTP right now. Firebase reported ${code || "an unknown error"}${message ? `: ${message}` : ""}`;
+  }
+
+  return "Unable to send OTP right now. Please check Firebase Phone sign-in, reCAPTCHA, and SMS delivery settings, then try again.";
 }
 
 function withTimeout(promise, timeoutMs) {
