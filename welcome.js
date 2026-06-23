@@ -27,6 +27,7 @@ if (!storedUser) {
 
 logoutButton?.addEventListener("click", async (event) => {
   event.preventDefault();
+  logoutButton.setAttribute("aria-disabled", "true");
   sessionStorage.removeItem("lexreasonAuthUser");
 
   if (auth) {
@@ -37,5 +38,5 @@ logoutButton?.addEventListener("click", async (event) => {
     }
   }
 
-  window.location.href = "./index.html";
+  window.location.href = "./index.html?mode=switch-account";
 });

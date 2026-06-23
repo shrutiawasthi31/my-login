@@ -14,6 +14,7 @@ const verifyOtpButton = document.getElementById("verify-otp");
 const phoneInput = document.getElementById("phone-number");
 const otpInput = document.getElementById("otp-code");
 const statusBox = document.getElementById("auth-status");
+const pageMode = new URLSearchParams(window.location.search).get("mode");
 
 let auth;
 let confirmationResult;
@@ -33,6 +34,7 @@ if (!hasFirebaseConfig) {
   auth.languageCode = "en";
   setupGoogleLogin();
   setupOtpLogin();
+  showPageModeNotice();
 }
 
 function disableAuthActions() {
@@ -45,6 +47,9 @@ function disableAuthActions() {
 
 function setupGoogleLogin() {
   const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({
+    prompt: "select_account"
+  });
 
   googleButton?.addEventListener("click", async () => {
     setStatus("Opening Google sign-in...", "info");
@@ -276,6 +281,12 @@ function clearStatus() {
 
   statusBox.className = "form-status";
   statusBox.textContent = "";
+}
+
+function showPageModeNotice() {
+  if (pageMode === "switch-account") {
+    setStatus("Signed out successfully. Choose any Google account to sign in again.", "success");
+  }
 }
 
 function toggleOtpButtons(isSending, otpReady = false) {
