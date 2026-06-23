@@ -5,6 +5,8 @@ import { firebaseConfig, hasFirebaseConfig } from "./firebase-config.js";
 const logoutButton = document.getElementById("logout-button");
 const userDetails = document.getElementById("user-details");
 const welcomeCopy = document.getElementById("welcome-copy");
+const helloTitle = document.getElementById("hello-title");
+const helloReply = document.getElementById("hello-reply");
 const storedUser = sessionStorage.getItem("lexreasonAuthUser");
 
 let auth = null;
@@ -24,6 +26,12 @@ if (!storedUser) {
   welcomeCopy.textContent = `Welcome to LexReason, ${user.displayName || "Member"}.`;
   userDetails.textContent = `${identity} | Login method: ${methodLabel}`;
 }
+
+helloTitle?.addEventListener("click", () => {
+  if (helloReply) {
+    helloReply.textContent = "Hey";
+  }
+});
 
 logoutButton?.addEventListener("click", async (event) => {
   event.preventDefault();

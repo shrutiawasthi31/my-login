@@ -54,6 +54,11 @@
         margin: 0;
         color: #1d1812;
         font: 700 clamp(2.6rem, 5vw, 4rem) / 1 Georgia, "Times New Roman", serif;
+        cursor: pointer;
+      }
+
+      h1:hover {
+        color: var(--gold-deep);
       }
 
       p {
@@ -93,6 +98,13 @@
         box-shadow: 0 14px 24px rgba(185, 139, 49, 0.24);
       }
 
+      .reply {
+        min-height: 1.75rem;
+        margin: -0.8rem 0 1.4rem;
+        color: var(--gold-deep);
+        font-weight: 700;
+      }
+
       @media (max-width: 640px) {
         .shell {
           padding: 1.2rem;
@@ -107,8 +119,9 @@
   <body>
     <div class="shell">
       <div class="card">
-        <h1>Hello World</h1>
+        <h1 id="hello-title">Hello World</h1>
         <p id="welcome-copy">Welcome to LexReason</p>
+        <div class="reply" id="hello-reply" aria-live="polite"></div>
         <div class="user-meta" id="user-meta">
           <strong>Signed in user</strong>
           <span id="user-details">Loading session details...</span>
